@@ -1,0 +1,50 @@
+#!/usr/bin/env python
+
+from workers.worker import Worker, WorkerTask
+from queue import Queue
+import threading
+import os
+import re
+import argparse
+import pathlib
+
+
+def is_tif(filename: str, use_extension: bool = True):
+    if use_extension:
+        return re.match(r".*\.tif", filename) is not None
+    else:
+        with open(filename, 'rb') as f:
+            r = f.read(4)
+            return r == b'\x49\x49\x2A\x00' or r == b'\x4D\x4D\x00\x2A'
+
+
+if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--src", required=True)
+    parser.add_argument("--dst", required=True)
+    parser.add_argument("--move", action="store_true")
+    parser.add_argument("--workers", default=os.cpu_count(), help="Number of workers to use. Default to the number of cpu cores")
+    args = parser.parse_args()
+
+    if not os.path.isdir(args.src):
+        print(f"Input directory doesn't exist: {args.src}")
+
+    dst = pathlib.Path(args.dst)
+    if not dst.is_dir():
+        dst.mkdir(parents=True)
+
+    stop_event = threading.Event()
+    work_queue = Queue()
+    workers = [Worker(work_queue=work_queue, stop_event=stop_event, move_file=args.move, name=f"worker-{i}", dst_dir=str(dst)) for i in range(8)]
+    for worker in workers:
+        worker.start()
+
+    for dirpath, dirnames, filenames in os.walk(args.src):
+        for file in filenames:
+            if is_tif(file):
+                work_queue.put(WorkerTask(os.path.join(dirpath, file)))
+    work_queue.join()
+    stop_event.set()
+    for worker in workers:
+        worker.join()
