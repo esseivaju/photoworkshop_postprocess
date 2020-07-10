@@ -36,9 +36,8 @@ class Worker(threading.Thread):
                 return code_data
         text = pytesseract.image_to_string(imgpath).splitlines()
         for line in text:
-            ext = line.rsplit(".", 1)[-1]
-            if ext.isalnum() and imgpath.endswith(ext):
-                return ext
+            if line.startswith(self.__project):
+                return line
 
     def run(self):
         while not self.__stop_event.is_set():
