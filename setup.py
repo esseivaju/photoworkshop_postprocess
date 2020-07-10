@@ -8,6 +8,8 @@ setup(
     packages=find_packages(),
     scripts=["bin/photoworkshop_postprocess"],
     install_requires=[
-        "pytesseract>=0.3.4"
+        "pytesseract>=0.3.4",
+        "pyzbar>=0.1.8",
+        "Pillow>=7.2.0"
     ]
 )

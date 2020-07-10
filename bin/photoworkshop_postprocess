@@ -33,6 +33,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--src", required=True)
     parser.add_argument("--dst", required=True)
+    parser.add_argument("--project", required=True)
     parser.add_argument("--move", action="store_true")
     parser.add_argument("--workers", default=os.cpu_count(), help="Number of workers to use. Default to the number of cpu cores")
     args = parser.parse_args()
@@ -46,7 +47,7 @@ if __name__ == "__main__":
 
     stop_event = threading.Event()
     work_queue = Queue()
-    workers = [Worker(work_queue=work_queue, stop_event=stop_event, move_file=args.move, name=f"worker-{i}", dst_dir=str(dst)) for i in range(8)]
+    workers = [Worker(work_queue=work_queue, stop_event=stop_event, move_file=args.move, project=args.project, name=f"worker-{i}", dst_dir=str(dst)) for i in range(8)]
     for worker in workers:
         worker.start()
 

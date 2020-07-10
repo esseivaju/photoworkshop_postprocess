@@ -9,6 +9,8 @@ This script requires tesseract. Follow the installation instruction [here](https
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 # Install Tesseract
 brew install tesseract
+# Install zbar
+brew instal zbar
 ```
 You'll then need to setup a virtual env to install the script and its dependencies. Download [Miniconda3 MacOSX 64-bit bash](https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh) on the [mininconda website](https://docs.conda.io/en/latest/miniconda.html) then open a terminal and execute the following commands:
 ```bash
@@ -36,18 +38,20 @@ photoworkshop_postprocess --help # You have access to cli command again
 ## Usage
 
 ### photoworkshop_postprocess
-This script will process an input src dir (specified wih --src) and recursively look for tif image files in the directory and each subdirectory. 
-Each image will be analyzed using tesseract-ocr to try to find a filename in it. If a filename is found, it is moved to the dst folder using the new filename. 
-If no filename is found in the image, no action is taken. The --move flag allows to move instead of copy files, deleting the original files.
+This script will process an input src dir (specified wih ```--src```) and recursively look for tif image files in the directory and each subdirectory. 
+Each image will be analyzed using zbar and tesseract-ocr to try to find a filename in it. If a filename is found, it is moved to the dst folder using the new filename. 
+If no filename is found in the image, no action is taken. The ```--move``` flag allows to move instead of copy files, deleting the original files.
+
+In addition to src and dst, a project name needs to be specified. Only string found in the picture which start with the argument specified using ```--project``` will be considered as potential filenames.
 
 ```bash
 # Example, create a copy of each tif file in the src directory, reading new image name using tesseract-ocr
-photoworkshop_postprocess --src /path/to/data --dst /path/to/data 
+photoworkshop_postprocess --src /path/to/data --dst /path/to/data --project SLA-MORF
 
 # Same as previous example except that original files are deleted
-photoworkshop_postprocess --src /path/to/data --dst /path/to/data --move
+photoworkshop_postprocess --src /path/to/data --dst /path/to/data --project SLA-MORF --move
 
 # Copy images to another directory
-photoworkshop_postprocess --src /disk1/path/to/data --dst /disk2/path/to/data 
+photoworkshop_postprocess --src /disk1/path/to/data --dst /disk2/path/to/data --project SLA-MORF
 ```
 A logfile called photoworkshop.log will be created in you working directory, containing all files that weren't copied because no new filename were found in the picture.

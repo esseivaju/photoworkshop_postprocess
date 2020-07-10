@@ -1,5 +1,7 @@
 import threading
 from queue import Queue, Empty
+from pyzbar.pyzbar import decode
+from PIL import Image
 import pytesseract
 import shutil
 import os
@@ -14,16 +16,24 @@ class WorkerTask():
 
 class Worker(threading.Thread):
 
-    def __init__(self, work_queue: Queue,  stop_event: threading.Event, move_file: bool,  name: str, dst_dir: str, *args, **kwargs):
+    def __init__(self, work_queue: Queue,  stop_event: threading.Event, move_file: bool,  project: str, name: str, dst_dir: str, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.setName(name)
         self.__work_queue = work_queue
         self.__stop_event = stop_event
         self.__dst = dst_dir
+        self.__project = project
         self.__move_op = shutil.move if move_file else shutil.copy
         self.__logger = logging.getLogger(self.getName())
 
     def __find_name_in_img(self, imgpath: str):
+        decoded = decode(Image.open(imgpath))
+        for barcode in decoded:
+            code_data = barcode.data.decode()
+            if code_data.startswith(self.__project):
+                if not code_data.endswith(".tif"):
+                    code_data = f"{code_data}.tif"
+                return code_data
         text = pytesseract.image_to_string(imgpath).splitlines()
         for line in text:
             ext = line.rsplit(".", 1)[-1]
