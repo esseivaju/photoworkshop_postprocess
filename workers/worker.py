@@ -49,7 +49,9 @@ class Worker(threading.Thread):
             else:
                 img_name = self.__find_name_in_img(message.img)
                 if img_name:
-                    self.__move_op(message.img, os.path.join(self.__dst, img_name))
+                    dst_file = os.path.join(self.__dst, img_name)
+                    if not os.path.isfile(dst_file):
+                        self.__move_op(message.img, dst_file)
                 else:
                     self.__logger.warning(f"Couldnt find filename in {message.img}")
                 self.__work_queue.task_done()
