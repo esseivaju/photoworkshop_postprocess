@@ -3,6 +3,7 @@ from queue import Queue, Empty
 import pytesseract
 import shutil
 import os
+import logging
 
 
 class WorkerTask():
@@ -20,6 +21,7 @@ class Worker(threading.Thread):
         self.__stop_event = stop_event
         self.__dst = dst_dir
         self.__move_op = shutil.move if move_file else shutil.copy
+        self.__logger = logging.getLogger(self.getName())
 
     def __find_name_in_img(self, imgpath: str):
         text = pytesseract.image_to_string(imgpath).splitlines()
@@ -38,4 +40,6 @@ class Worker(threading.Thread):
                 img_name = self.__find_name_in_img(message.img)
                 if img_name:
                     self.__move_op(message.img, os.path.join(self.__dst, img_name))
+                else:
+                    self.__logger.warning(f"Couldnt find filename in {message.img}")
                 self.__work_queue.task_done()

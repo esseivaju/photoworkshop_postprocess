@@ -4,9 +4,19 @@ from workers.worker import Worker, WorkerTask
 from queue import Queue
 import threading
 import os
+import logging
+import sys
 import re
 import argparse
 import pathlib
+
+
+def configure_logging():
+    handlers = []
+    handlers.append(logging.StreamHandler(sys.stdout))
+    handlers.append(logging.FileHandler('photoworkshop.log', 'w'))
+    logging.basicConfig(handlers=handlers, level=logging.INFO,
+                        style='{', format="{asctime} | {levelname} | {name} | {module} | {message}")
 
 
 def is_tif(filename: str, use_extension: bool = True):
@@ -19,7 +29,7 @@ def is_tif(filename: str, use_extension: bool = True):
 
 
 if __name__ == "__main__":
-
+    configure_logging()
     parser = argparse.ArgumentParser()
     parser.add_argument("--src", required=True)
     parser.add_argument("--dst", required=True)
