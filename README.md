@@ -10,7 +10,7 @@ This script requires tesseract. Follow the installation instruction [here](https
 # Install Tesseract
 brew install tesseract
 # Install zbar
-brew instal zbar
+brew install zbar
 ```
 You'll then need to setup a virtual env to install the script and its dependencies. Download [Miniconda3 MacOSX 64-bit bash](https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh) on the [mininconda website](https://docs.conda.io/en/latest/miniconda.html) then open a terminal and execute the following commands:
 ```bash
