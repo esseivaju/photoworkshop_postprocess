@@ -49,5 +49,5 @@ photoworkshop_postprocess --src /path/to/data --dst /path/to/data --move
 
 # Copy images to another directory
 photoworkshop_postprocess --src /disk1/path/to/data --dst /disk2/path/to/data 
-
-
+```
+A logfile called photoworkshop.log will be created in you working directory, containing all files that weren't copied because no new filename were found in the picture.
