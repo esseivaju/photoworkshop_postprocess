@@ -1,7 +1,7 @@
 # photoworkshop_postprocess
 Find a filename in image files in the input directory and rename each image file with the filename found in it using OCR
 
-## Installtion on macOS
+## Installation on macOS
 
 This script requires tesseract. Follow the installation instruction [here](https://tesseract-ocr.github.io/tessdoc/Home.html#macos). The easiest way of installing it is to use Homebrew:
 ```bash
