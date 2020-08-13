@@ -19,8 +19,10 @@ cd ~/Downloads
 chmod +x Miniconda3-latest-MacOSX-x86_64.sh
 ./Miniconda3-latest-MacOSX-x86_64.sh -b
 
-# !!IMPORTANT!! -> Close the current terminal window and reopen a new window for the changes to take effect otherwise you'll get errors when executing the next commands.
+# !!IMPORTANT!! -> Close the current terminal window and reopen a new window for the changes to take effect otherwise you'll get errors when executing the next commands. Use the command 'exit' to close the current shell.
+exit
 
+# Reopen a new terminal window
 conda create -y -nphotoworkshop python=3.7
 conda activate photoworkshop
 pip install git+https://github.com/esseivaju/photoworkshop_postprocess
