@@ -40,6 +40,8 @@ if __name__ == "__main__":
 
     if not os.path.isdir(args.src):
         print(f"Input directory doesn't exist: {args.src}")
+    if not os.path.isabs(args.src):
+        args.src = os.path.join(os.getcwd(), args.src)
 
     dst = pathlib.Path(args.dst)
     if not dst.is_dir():
@@ -47,7 +49,7 @@ if __name__ == "__main__":
 
     stop_event = threading.Event()
     work_queue = Queue()
-    workers = [Worker(work_queue=work_queue, stop_event=stop_event, move_file=args.move, project=args.project, name=f"worker-{i}", dst_dir=str(dst)) for i in range(8)]
+    workers = [Worker(src_dir=args.src, work_queue=work_queue, stop_event=stop_event, move_file=args.move, project=args.project, name=f"worker-{i}", dst_dir=str(dst)) for i in range(8)]
     for worker in workers:
         worker.start()
 
