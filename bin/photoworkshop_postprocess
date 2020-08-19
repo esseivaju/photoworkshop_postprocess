@@ -32,7 +32,7 @@ if __name__ == "__main__":
     configure_logging()
     parser = argparse.ArgumentParser()
     parser.add_argument("--src", required=True)
-    parser.add_argument("--dst", required=True)
+    parser.add_argument("--dst", help="Default to --src if not specified")
     parser.add_argument("--project", required=True)
     parser.add_argument("--move", action="store_true")
     parser.add_argument("--workers", default=os.cpu_count(), help="Number of workers to use. Default to the number of cpu cores")
@@ -42,6 +42,9 @@ if __name__ == "__main__":
         print(f"Input directory doesn't exist: {args.src}")
     if not os.path.isabs(args.src):
         args.src = os.path.join(os.getcwd(), args.src)
+
+    if not args.dst:
+        args.dst = args.src
 
     dst = pathlib.Path(args.dst)
     if not dst.is_dir():
