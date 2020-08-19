@@ -17,7 +17,7 @@ class WorkerTask():
 
 class Worker(threading.Thread):
 
-    def __init__(self, src_dir: str, work_queue: Queue,  stop_event: threading.Event, move_file: bool,  project: str, name: str, dst_dir: str, *args, **kwargs):
+    def __init__(self, src_dir: str, work_queue: Queue,  stop_event: threading.Event, copy_file: bool,  project: str, name: str, dst_dir: str, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.setName(name)
         self.__work_queue = work_queue
@@ -25,7 +25,7 @@ class Worker(threading.Thread):
         self.__dst = dst_dir
         self.__src = src_dir
         self.__project = project
-        self.__move_op = shutil.move if move_file else shutil.copy
+        self.__move_op = shutil.copy if copy_file else shutil.move
         self.__logger = logging.getLogger(self.getName())
 
     def __find_name_in_img(self, imgpath: str):
