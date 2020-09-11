@@ -57,3 +57,16 @@ photoworkshop_postprocess --src /path/to/data --dst /path/to/data --project SLA-
 photoworkshop_postprocess --src /disk1/path/to/data --dst /disk2/path/to/data --project SLA-MORF
 ```
 A logfile called photoworkshop.log will be created in you working directory, containing all files that weren't copied because no new filename were found in the picture.
+
+```
+usage: photoworkshop_postprocess [-h] --src SRC [--dst DST] --project PROJECT
+                                 [--copy] [--workers WORKERS]
+
+optional arguments:
+  -h, --help         show this help message and exit
+  --src SRC          Source directory containing data toprocess
+  --dst DST          Default to --src if not specified
+  --project PROJECT  Prefix which must match barcode string
+  --copy             Copy files if specified, default is to move files
+  --workers WORKERS  Number of 
+```

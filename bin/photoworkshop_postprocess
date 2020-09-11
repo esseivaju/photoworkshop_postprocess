@@ -31,10 +31,10 @@ def is_tif(filename: str, use_extension: bool = True):
 if __name__ == "__main__":
     configure_logging()
     parser = argparse.ArgumentParser()
-    parser.add_argument("--src", required=True)
+    parser.add_argument("--src", required=True, help="Source directory containing data toprocess")
     parser.add_argument("--dst", help="Default to --src if not specified")
-    parser.add_argument("--project", required=True)
-    parser.add_argument("--copy", action="store_true")
+    parser.add_argument("--project", required=True, help="Prefix which must match barcode string")
+    parser.add_argument("--copy", action="store_true", help="Copy files if specified, default is to move files")
     parser.add_argument("--workers", default=os.cpu_count(), help="Number of workers to use. Default to the number of cpu cores")
     args = parser.parse_args()
 
